@@ -8,7 +8,7 @@ import java.util.UUID;
 @Entity
 public class Account implements IAccount {
 
-
+    private AccountStatusEnum.Status _status;
     private UUID _accountID;
     @NotBlank(message = "Account holder ID is required.")
     private Integer _userID;
@@ -18,6 +18,7 @@ public class Account implements IAccount {
         this._accountID = UUID.randomUUID();
         this._userID = _userID;
         this._balance = 0.0;
+        this._status = AccountStatusEnum.Status.ACTIVE;
     }
 
     @Override
@@ -48,5 +49,13 @@ public class Account implements IAccount {
     @Override
     public void set_balance(Double _balance) {
         this._balance = _balance;
+    }
+
+    public AccountStatusEnum.Status get_status() {
+        return _status;
+    }
+
+    public void set_status(AccountStatusEnum.Status _status) {
+        this._status = _status;
     }
 }

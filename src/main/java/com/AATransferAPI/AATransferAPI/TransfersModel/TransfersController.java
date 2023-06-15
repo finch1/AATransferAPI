@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -18,25 +19,31 @@ public class TransfersController {
     }
 
     @GetMapping(path = "{accountID}")
-    public String getTransfersForAccount(@PathVariable("accountID") UUID accountID){
+    public List<Transfers> getTransfersForAccount(@PathVariable("accountID") UUID accountID){
         if(accountID != null)
             return  transfersService.getTransfersForAccount(accountID);
+
+        return null;
     }
 
     @GetMapping(path = "{accountID}")
-    public String getTransfersFromAccount(@PathVariable("accountID") UUID accountID){
+    public List<Transfers> getTransfersFromAccount(@PathVariable("accountID") UUID accountID){
         if(accountID != null)
             return  transfersService.getTransfersForAccount(accountID);
+
+        return null;
     }
 
     @GetMapping(path = "{accountID}")
-    public String getTransfersToAccount(@PathVariable("accountID") UUID accountID){
+    public List<Transfers> getTransfersToAccount(@PathVariable("accountID") UUID accountID){
         if(accountID != null)
             return  transfersService.getTransfersToAccount(accountID);
+
+        return null;
     }
 
     @PostMapping(path = "makePayment")
-    public Enum MakePayment(@Valid @RequestBody Transfers transfers){
-        return transfersService.MakePayment(transfers);
+    public TransfersStatusEnum.Status MakePayment(@Valid @RequestBody Transfers transfers){
+        return transfersService.MakeTransfer(transfers);
     }
 }

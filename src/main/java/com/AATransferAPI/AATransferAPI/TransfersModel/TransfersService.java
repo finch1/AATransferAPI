@@ -1,7 +1,6 @@
 package com.AATransferAPI.AATransferAPI.TransfersModel;
 
 import com.AATransferAPI.AATransferAPI.AccountModel.AccountService;
-import com.AATransferAPI.AATransferAPI.TransfersModel.TransfersDAOService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,16 +31,18 @@ public class TransfersService {
         return  _transfersDAOService.getTransfersToAccount(accountID);
     }
 
-    public Boolean MakeTransfer(Transfers transfer){
+    public TransfersStatusEnum.Status MakeTransfer(Transfers transfer){
 
         // do accounts exist
-        if(_accountService.verfiyAccountsForTransfer(transfer)){
+        if(_accountService.verifyAccountsForTransfer(transfer)){
             // transfer money from account to account
             _transfersDAOService.MakeTransfer(transfer);
+            // update account balance
+            _accountService.updateAccountsAfterTransfer(transfer);
             }
             // send notification (handle event) https://www.google.com/search?client=firefox-b-d&q=c%23+events+in+java
 
-        return true;
+        return TransfersStatusEnum.Status.SUCCESSFUL;
     }
 
 }

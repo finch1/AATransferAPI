@@ -22,6 +22,8 @@ public class AccountController {
     public List<Account> getAllAccountsForUser(@PathVariable("userID")UUID userID){
         if(userID != null)
             return accountService.getAllAccountsForUser(userID);
+
+        return null;
     }
 
     // When the target argument fails to pass the validation, Spring Boot throws a MethodArgumentNotValidException exception.
@@ -31,13 +33,18 @@ public class AccountController {
     }
 
     @PutMapping(path = "{userID}")
-    public boolean updateAccountOfUser(@PathVariable("userID") UUID userID, @RequestBody Account account){
-        return accountService.updateAccountOfUser(userID, account);
+    public boolean updateAccountDetailsOfUser(@PathVariable("userID") UUID userID, @Valid @RequestBody Account account){
+        if(userID != null)
+            return accountService.updateAccountDetailsOfUser(userID, account);
+
+        return false;
     }
 
     @DeleteMapping(path = "{userID}")
     public boolean deleteAccountOfUser(@PathVariable("userID") UUID userID){
         if(userID != null)
             return accountService.deleteAccountOfUser(userID);
+
+        return false;
     }
 }

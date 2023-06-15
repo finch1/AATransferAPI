@@ -1,14 +1,13 @@
 package com.AATransferAPI.AATransferAPI.AccountModel;
 
-import com.AATransferAPI.AATransferAPI.DAO.IAccountDAO;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-@Service
+@Repository
 public class AccountDAOService {
 
     private  static List<Account> A_DB = new ArrayList<Account>();
@@ -18,20 +17,32 @@ public class AccountDAOService {
         return true;
     }
 
-    public List<Account> getAllAccountsForUser(@PathVariable("userID") UUID userID){
-        return accountService.getAllAccountsForUser(userID);
+    public List<Account> getAllAccountsForUser(UUID userID){
+
+        List<Account> accountsList = A_DB.stream().
+                filter(a -> a.get_userID().equals(userID)).
+                collect(Collectors.toList());
+
+        return accountsList;
     }
 
-    public boolean updateAccountOfUser(@PathVariable("userID") UUID userID, @RequestBody Account account){
-        return accountService.updateAccountOfUser(userID, account);
+    public boolean updateAccountDetailsOfUser(UUID userID, Account new_account){
+        Account oldAccount = A_DB.stream().filter(a -> a.get_userID().equals(userID)).findFirst().orElse(null);
+
+        if(oldAccount != null){
+            oldAccount.set_status(new_account.get_status());
+            return true;
+        }
+
+        return false;
     }
 
-    public boolean deleteAccountOfUser(@PathVariable("userID") UUID userID){
-        return accountService.deleteAccountOfUser(userID);
-    }
-
-    public List<Account> getAccountsForTransfer(Account fromAccount, Account toAccount){
-
+    public boolean deleteAccountOfUser(UUID userID){
+        if(userID != null)
+        {
+            return A_DB.removeIf(account -> account.get_userID().equals(userID));
+        }
+        return false;
     }
 
 }
