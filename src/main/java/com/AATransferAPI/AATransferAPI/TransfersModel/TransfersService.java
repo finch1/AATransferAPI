@@ -1,7 +1,7 @@
 package com.AATransferAPI.AATransferAPI.TransfersModel;
 
-import com.AATransferAPI.AATransferAPI.AccountModel.Account;
 import com.AATransferAPI.AATransferAPI.AccountModel.AccountService;
+import com.AATransferAPI.AATransferAPI.TransfersModel.TransfersDAOService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,42 +15,33 @@ public class TransfersService {
     private final AccountService _accountService;
 
     @Autowired
-    public TransfersService(TransfersDAOService transfersDAOService) {
-        this._transfersDAOService = transfersDAOService;
+    public TransfersService(TransfersDAOService _transfersDAOService, AccountService _accountService) {
+        this._transfersDAOService = _transfersDAOService;
+        this._accountService = _accountService;
     }
 
-    public String getTransfersForAccount(UUID account){
-        return  _transfersDAOService.getTransfersForAccount();
+    public List<Transfers> getTransfersForAccount(UUID accountID){
+        return  _transfersDAOService.getTransfersForAccount(accountID);
     }
 
-    public String getTransfersFromAccount(UUID account){
-        return  _transfersDAOService.getTransfersFromAccount();
+    public List<Transfers> getTransfersFromAccount(UUID accountID){
+        return  _transfersDAOService.getTransfersFromAccount(accountID);
     }
 
-    public String getTransfersToAccount(UUID account){
-        return  _transfersDAOService.getTransfersToAccount();
+    public List<Transfers> getTransfersToAccount(UUID accountID){
+        return  _transfersDAOService.getTransfersToAccount(accountID);
     }
 
     public Boolean MakeTransfer(Transfers transfer){
 
-        UUID _fromAccount = transfer.get_accountFrom();
-        UUID _toAccount = transfer.get_accountTo();
-
-        List<Account> compareAccounts =  _accountDAOService.getAccountsForTransfer(_fromAccount, _toAccount);
-
         // do accounts exist
-        if(compareAccounts.size() == 2) {
-            // does from account have enough balance?
-            _accountService.checkBalanceAndCurrency(_fromAccount, transfer.get_amount(), transfer.get_currency());
-            // does from & to account have the currency
-            _accountService.checkStatusAndCurrency(_toAccount, transfer.get_currency());
-
+        if(_accountService.verfiyAccountsForTransfer(transfer)){
             // transfer money from account to account
-            _transfersDAOService.MakePayment(transfer);
+            _transfersDAOService.MakeTransfer(transfer);
             }
             // send notification (handle event) https://www.google.com/search?client=firefox-b-d&q=c%23+events+in+java
 
-        return _transfersDAOService.MakePayment();
+        return true;
     }
 
 }

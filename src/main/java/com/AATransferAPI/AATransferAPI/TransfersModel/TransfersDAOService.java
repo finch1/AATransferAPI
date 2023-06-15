@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public class TransferDAOService {
+public class TransfersDAOService {
 
     List<Transfers> T_DB = new ArrayList<Transfers>();
 
