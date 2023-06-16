@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-@RestController
 @RequestMapping(path="api/v1/account")
+@RestController
 public class AccountController {
 
     private final AccountService accountService;
@@ -18,18 +18,27 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @GetMapping(path = "{userID")
-    public List<Account> getAllAccountsForUser(@PathVariable("userID")UUID userID){
+    @GetMapping
+    public String welcome(){
+        return "Welcome!";
+    }
+
+    // request account for userID
+    @GetMapping(path = "{userID}")
+    public List<Account> getAllAccountsForUser(@PathVariable("userID")Integer userID){
         if(userID != null)
             return accountService.getAllAccountsForUser(userID);
 
         return null;
     }
 
+    // request account for accountID
+
     // When the target argument fails to pass the validation, Spring Boot throws a MethodArgumentNotValidException exception.
     @PostMapping
-    public boolean insertNewAccountForUser(@Valid @RequestBody Account account){
+    public boolean insertNewAccountForUser(@RequestBody Account account){
         return accountService.insertNewAccountForUser(account);
+        // return accountID
     }
 
     @PutMapping(path = "{userID}")

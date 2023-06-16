@@ -1,7 +1,7 @@
 package com.AATransferAPI.AATransferAPI.TransfersModel;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Entity;
+//:)import jakarta.persistence.Entity;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
-@Entity
+//:)@Entity
 public class Transfers {
 
     // @NotBlank = The annotated element must not be null and must contain at least one non-whitespace character. Accepts CharSequence.

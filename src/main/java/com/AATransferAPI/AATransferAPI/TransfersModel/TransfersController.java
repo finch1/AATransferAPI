@@ -18,6 +18,14 @@ public class TransfersController {
         this.transfersService = transfersService;
     }
 
+    @GetMapping(path = "{userID}")
+    public List<Transfers> getTransfersForUser(@PathVariable("userID") UUID userID){
+        if(userID != null)
+            return  transfersService.getTransfersForUser(userID);
+
+        return null;
+    }
+
     @GetMapping(path = "{accountID}")
     public List<Transfers> getTransfersForAccount(@PathVariable("accountID") UUID accountID){
         if(accountID != null)
@@ -26,15 +34,15 @@ public class TransfersController {
         return null;
     }
 
-    @GetMapping(path = "{accountID}")
+    @GetMapping(path = "/from/{accountID}")
     public List<Transfers> getTransfersFromAccount(@PathVariable("accountID") UUID accountID){
         if(accountID != null)
-            return  transfersService.getTransfersForAccount(accountID);
+            return  transfersService.getTransfersFromAccount(accountID);
 
         return null;
     }
 
-    @GetMapping(path = "{accountID}")
+    @GetMapping(path = "/to/{accountID}")
     public List<Transfers> getTransfersToAccount(@PathVariable("accountID") UUID accountID){
         if(accountID != null)
             return  transfersService.getTransfersToAccount(accountID);

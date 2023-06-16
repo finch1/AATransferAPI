@@ -1,11 +1,12 @@
 package com.AATransferAPI.AATransferAPI.AccountModel;
 
-import jakarta.persistence.Entity;
+//:)import jakarta.persistence.Entity;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.UUID;
 
-@Entity
+//:)@Entity
 public class Account implements IAccount {
 
     private AccountStatusEnum.Status _status;
@@ -14,7 +15,7 @@ public class Account implements IAccount {
     private Integer _userID;
     private Double _balance;
 
-    public Account(Integer _userID) {
+    public Account(@JsonProperty("userID") Integer _userID) {
         this._accountID = UUID.randomUUID();
         this._userID = _userID;
         this._balance = 0.0;

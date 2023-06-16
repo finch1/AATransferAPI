@@ -1,5 +1,6 @@
 package com.AATransferAPI.AATransferAPI.TransfersModel;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -7,11 +8,18 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Repository
-public class TransfersDAOService {
+@Repository("MySQLTransfers")
+public class TransfersDAOService implements com.AATransferAPI.AATransferAPI.DAO.ITransfersDAO {
 
     List<Transfers> T_DB = new ArrayList<>();
 
+    @Override
+    public List<Transfers> getTransfersForUser(UUID userID){
+
+        return null;
+    }
+
+    @Override
     public List<Transfers> getTransfersForAccount(UUID account){
 
         List<Transfers> transfersList = T_DB.stream().
@@ -21,6 +29,7 @@ public class TransfersDAOService {
         return transfersList;
     }
 
+    @Override
     public List<Transfers> getTransfersFromAccount(UUID account){
 
         List<Transfers> transfersList = T_DB.stream().
@@ -30,6 +39,7 @@ public class TransfersDAOService {
         return transfersList;
     }
 
+    @Override
     public List<Transfers> getTransfersToAccount(UUID account){
 
         List<Transfers> transfersList = T_DB.stream().
@@ -39,6 +49,7 @@ public class TransfersDAOService {
         return transfersList;
     }
 
+    @Override
     public TransfersStatusEnum.Status MakeTransfer(Transfers transfers){
 
         // lock until transaction done

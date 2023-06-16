@@ -1,5 +1,6 @@
 package com.AATransferAPI.AATransferAPI.AccountModel;
 
+import com.AATransferAPI.AATransferAPI.DAO.IAccountDAO;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -7,17 +8,19 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Repository
-public class AccountDAOService {
+@Repository("MySQLAccounts")
+public class AccountDAOService implements IAccountDAO {
 
     private  static List<Account> A_DB = new ArrayList<Account>();
 
+    @Override
     public boolean insertNewAccountForUser(Account account){
         A_DB.add(account);
         return true;
     }
 
-    public List<Account> getAllAccountsForUser(UUID userID){
+    @Override
+    public List<Account> getAllAccountsForUser(Integer userID){
 
         List<Account> accountsList = A_DB.stream().
                 filter(a -> a.get_userID().equals(userID)).
@@ -26,6 +29,7 @@ public class AccountDAOService {
         return accountsList;
     }
 
+    @Override
     public boolean updateAccountDetailsOfUser(UUID userID, Account new_account){
         Account oldAccount = A_DB.stream().filter(a -> a.get_userID().equals(userID)).findFirst().orElse(null);
 
@@ -37,6 +41,7 @@ public class AccountDAOService {
         return false;
     }
 
+    @Override
     public boolean deleteAccountOfUser(UUID userID){
         if(userID != null)
         {
