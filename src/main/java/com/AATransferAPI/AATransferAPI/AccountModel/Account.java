@@ -1,24 +1,37 @@
 package com.AATransferAPI.AATransferAPI.AccountModel;
 
-//:)import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 
 import java.util.UUID;
 
-//:)@Entity
+@Entity
+@Table
 public class Account implements IAccount {
 
-    private AccountStatusEnum.Status _status;
+    @Id
+    @SequenceGenerator(
+            name = "account_seq",
+            sequenceName = "account_seq",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "account_seq"
+    )
     private UUID _accountID;
     @NotBlank(message = "Account holder ID is required.")
+    @Positive(message = "ID Greater then zero.")
     private Integer _userID;
     private Double _balance;
+    private AccountStatusEnum.Status _status;
 
     public Account(@JsonProperty("userID") Integer _userID) {
         this._accountID = UUID.randomUUID();
         this._userID = _userID;
-        this._balance = 0.0;
+        this._balance = 100.0; // adding funds to test with
         this._status = AccountStatusEnum.Status.ACTIVE;
     }
 

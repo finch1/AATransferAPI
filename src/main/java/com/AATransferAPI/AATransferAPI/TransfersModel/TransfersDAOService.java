@@ -14,12 +14,6 @@ public class TransfersDAOService implements com.AATransferAPI.AATransferAPI.DAO.
     List<Transfers> T_DB = new ArrayList<>();
 
     @Override
-    public List<Transfers> getTransfersForUser(UUID userID){
-
-        return null;
-    }
-
-    @Override
     public List<Transfers> getTransfersForAccount(UUID account){
 
         List<Transfers> transfersList = T_DB.stream().
@@ -28,6 +22,24 @@ public class TransfersDAOService implements com.AATransferAPI.AATransferAPI.DAO.
 
         return transfersList;
     }
+
+    @Override
+    public TransfersStatusEnum.Status MakeTransfer(Transfers transfers){
+
+        // lock until transaction done
+        T_DB.add(transfers);
+
+        return TransfersStatusEnum.Status.SUCCESSFUL;
+    }
+
+    /*
+    @Override
+        public List<Transfers> getTransfersForUser(UUID userID){
+
+        return null;
+    }
+
+
 
     @Override
     public List<Transfers> getTransfersFromAccount(UUID account){
@@ -48,14 +60,6 @@ public class TransfersDAOService implements com.AATransferAPI.AATransferAPI.DAO.
 
         return transfersList;
     }
-
-    @Override
-    public TransfersStatusEnum.Status MakeTransfer(Transfers transfers){
-
-        // lock until transaction done
-        T_DB.add(transfers);
-
-        return TransfersStatusEnum.Status.SUCCESSFUL;
-    }
+     */
 
 }

@@ -5,49 +5,71 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository("MySQLAccounts")
 public class AccountDAOService implements IAccountDAO {
 
-    private  static List<Account> A_DB = new ArrayList<Account>();
+    private List<Account> A_DB = new ArrayList<Account>();
+
+    @Override
+    public List<Account> getAllAccountsForUser(Integer userID){
+        return A_DB.stream().filter(a -> a.get_userID().equals(userID)).collect(Collectors.toList());
+    }
 
     @Override
     public boolean insertNewAccountForUser(Account account){
-        A_DB.add(account);
+        return A_DB.add(account);
+    }
+
+    /*
+
+    @Override
+    public Optional<Account> getAccountForUser(Integer userID, UUID accountID) {
+        return A_DB.stream()
+                .filter(a -> a.get_userID().equals(userID) && a.get_accountID().equals(accountID))
+                .findFirst();
+    }
+
+    @Override
+    public Optional<Account> updateAccountDetailsOfUser(Integer userID, UUID old_accountID, Account new_account){
+        // 48:53 https://www.youtube.com/watch?v=vtPkZShrvXQ
+        Optional<Account> oldAccount = getAccountForUser(userID, old_accountID);
+
+        if(!oldAccount.isEmpty()){
+            oldAccount.get().set_status(new_account.get_status());
+            return oldAccount;
+        }
+
+        return null;
+    }
+
+
+    @Override
+    public Optional<Account> deleteAllAccountsOfUser(Integer userID) {
+        Optional<Account> accounts = getAllAccountsForUser(userID);
+
+        if(accounts.isEmpty())
+            return false;
+
+        A_DB.remove(accounts.get());
         return true;
     }
 
     @Override
-    public List<Account> getAllAccountsForUser(Integer userID){
+    public Optional<Account> deleteAccountOfUser(Integer userID, UUID accountID){
 
-        List<Account> accountsList = A_DB.stream().
-                filter(a -> a.get_userID().equals(userID)).
-                collect(Collectors.toList());
+        Optional<Account> Account = getAccountForUser(userID, accountID);
 
-        return accountsList;
+        if(Account.isEmpty())
+            return false;
+
+        A_DB.remove(Account.get());
+        return true;
     }
+    */
 
-    @Override
-    public boolean updateAccountDetailsOfUser(UUID userID, Account new_account){
-        Account oldAccount = A_DB.stream().filter(a -> a.get_userID().equals(userID)).findFirst().orElse(null);
-
-        if(oldAccount != null){
-            oldAccount.set_status(new_account.get_status());
-            return true;
-        }
-
-        return false;
-    }
-
-    @Override
-    public boolean deleteAccountOfUser(UUID userID){
-        if(userID != null)
-        {
-            return A_DB.removeIf(account -> account.get_userID().equals(userID));
-        }
-        return false;
-    }
 
 }

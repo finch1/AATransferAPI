@@ -7,12 +7,18 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class AccountService {
 
-    private final IAccountDAO _accountDAOService;
+    private final IAccountRepository iAccountRepository;
+
+    @Autowired
+    public AccountService(IAccountRepository iAccountRepository) {
+        this.iAccountRepository = iAccountRepository;
+    }
 
     @Autowired
     public AccountService(@Qualifier("MySQLAccounts") IAccountDAO _accountDAOService) {
@@ -25,15 +31,16 @@ public class AccountService {
 
     public boolean insertNewAccountForUser( Account account){
         return _accountDAOService.insertNewAccountForUser(account);
-
     }
 
-    public boolean updateAccountDetailsOfUser(UUID userID, Account account){
+    /*
+    public Optional<Account> updateAccountDetailsOfUser(UUID userID, Account account){
         return _accountDAOService.updateAccountDetailsOfUser(userID, account);
     }
 
-    public boolean deleteAccountOfUser(UUID userID){
+    public Optional<Account> deleteAllAccountsOfUser(UUID userID){
             return _accountDAOService.deleteAccountOfUser(userID);
     }
+    */
 
 }

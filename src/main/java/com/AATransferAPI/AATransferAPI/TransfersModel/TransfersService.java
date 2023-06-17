@@ -21,20 +21,8 @@ public class TransfersService {
         this._accountService = _accountService;
     }
 
-    public List<Transfers> getTransfersForUser(UUID userID){
-        return  _transfersDAOService.getTransfersForUser(userID);
-    }
-
     public List<Transfers> getTransfersForAccount(UUID accountID){
         return  _transfersDAOService.getTransfersForAccount(accountID);
-    }
-
-    public List<Transfers> getTransfersFromAccount(UUID accountID){
-        return  _transfersDAOService.getTransfersFromAccount(accountID);
-    }
-
-    public List<Transfers> getTransfersToAccount(UUID accountID){
-        return  _transfersDAOService.getTransfersToAccount(accountID);
     }
 
     public TransfersStatusEnum.Status MakeTransfer(Transfers transfer){
@@ -50,5 +38,20 @@ public class TransfersService {
 
         return TransfersStatusEnum.Status.SUCCESSFUL;
     }
+
+    /*
+        public List<Transfers> getTransfersForUser(UUID userID){
+        return  _transfersDAOService.getTransfersForUser(userID);
+    }
+
+    public List<Transfers> getTransfersFromAccount(UUID accountID){
+        return  _transfersDAOService.getTransfersFromAccount(accountID);
+    }
+
+    public List<Transfers> getTransfersToAccount(UUID accountID){
+        return  _transfersDAOService.getTransfersToAccount(accountID);
+    }
+
+     */
 
 }
