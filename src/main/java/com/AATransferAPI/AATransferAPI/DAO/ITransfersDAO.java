@@ -9,7 +9,7 @@ import java.util.UUID;
 public interface ITransfersDAO {
 
 
-    List<Transfers> getTransfersForAccount(UUID account);
+    List<Transfers> getTransfersForAccount(Long account);
     TransfersStatusEnum.Status MakeTransfer(Transfers transfers);
     /*
     List<Transfers> getTransfersForUser(UUID userID);

@@ -14,7 +14,7 @@ public class TransfersDAOService implements com.AATransferAPI.AATransferAPI.DAO.
     List<Transfers> T_DB = new ArrayList<>();
 
     @Override
-    public List<Transfers> getTransfersForAccount(UUID account){
+    public List<Transfers> getTransfersForAccount(Long account){
 
         List<Transfers> transfersList = T_DB.stream().
                 filter(t -> t.get_accountFrom().equals(account) || t.get_accountTo().equals(account)).

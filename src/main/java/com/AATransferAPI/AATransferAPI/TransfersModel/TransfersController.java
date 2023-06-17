@@ -21,8 +21,19 @@ public class TransfersController {
         this.transfersService = transfersService;
     }
 
+    @GetMapping
+    public List<Transfers> getAllTransfers(){
+        return transfersService.getAllTransfers();
+    }
+
+    @PostMapping(path = "makePayment")
+    public String MakePayment(@Valid @RequestBody Transfers transfers){
+        return transfersService.MakeTransfer(transfers);
+    }
+
+/*
     @GetMapping(path = "{accountID}")
-    public ResponseEntity<List<Transfers>> getTransfersForAccount(@PathVariable("accountID") UUID accountID){
+    public ResponseEntity<List<Transfers>> getTransfersForAccount(@PathVariable("accountID") Long accountID){
 
         List<Transfers> transfers = transfersService.getTransfersForAccount(accountID);
 
@@ -31,13 +42,6 @@ public class TransfersController {
 
         return new ResponseEntity<>(transfers, HttpStatus.OK);
     }
-    @PostMapping(path = "makePayment")
-    public TransfersStatusEnum.Status MakePayment(@Valid @RequestBody Transfers transfers){
-        return transfersService.MakeTransfer(transfers);
-    }
-
-/*
-
 
     @GetMapping(path = "{userID}")
     public List<Transfers> getTransfersForUser(@PathVariable("userID") UUID userID){

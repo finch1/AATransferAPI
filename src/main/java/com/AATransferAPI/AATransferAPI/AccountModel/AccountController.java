@@ -12,8 +12,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-@RequestMapping(path="api/v1/account")
 @RestController
+@RequestMapping(path="api/v1/account")
 public class AccountController {
 
     private final AccountService accountService;
@@ -29,7 +29,7 @@ public class AccountController {
     }
 
     @GetMapping(path = "{userID}")
-    public ResponseEntity<List<Account>> getAllAccountsForUser(@PathVariable("userID")Integer userID){
+    public ResponseEntity<List<Account>> getAllAccountsForUser(@PathVariable("userID")Long userID){
 
         List<Account> account = accountService.getAllAccountsForUser(userID);
 
@@ -46,7 +46,7 @@ public class AccountController {
     @PostMapping
     public ResponseEntity<String> insertNewAccountForUser(@RequestBody Account account){ //@Valid @NotNull
 
-        if(accountService.insertNewAccountForUser(account))
+        if(accountService.insertNewAccountForUser(account).get_accountID() != null)
             return new ResponseEntity<>("New account created.", HttpStatus.OK);
 
         return new ResponseEntity<>("Failed to create new account.", HttpStatus.NOT_IMPLEMENTED);

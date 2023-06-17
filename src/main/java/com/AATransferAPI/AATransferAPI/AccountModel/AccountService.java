@@ -1,7 +1,5 @@
 package com.AATransferAPI.AATransferAPI.AccountModel;
 
-import com.AATransferAPI.AATransferAPI.DAO.IAccountDAO;
-import com.AATransferAPI.AATransferAPI.TransfersModel.Transfers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -13,24 +11,24 @@ import java.util.UUID;
 @Service
 public class AccountService {
 
-    private final IAccountRepository iAccountRepository;
+    private final IAccountRepository repository;
 
     @Autowired
-    public AccountService(IAccountRepository iAccountRepository) {
-        this.iAccountRepository = iAccountRepository;
+    public AccountService(@Qualifier("MySQLTransfers") IAccountRepository repository) {
+        this.repository = repository;
     }
 
-    @Autowired
-    public AccountService(@Qualifier("MySQLAccounts") IAccountDAO _accountDAOService) {
-        this._accountDAOService = _accountDAOService;
+    public Optional<Account> getAllAccountsByID(Long accountID){
+        return repository.findById(accountID);
     }
 
-    public List<Account> getAllAccountsForUser(Integer userID){
-            return _accountDAOService.getAllAccountsForUser(userID);
+    public List<Account> getAllAccountsForUser(Long userID){
+        return repository.findAllByUserID(userID);
+
     }
 
-    public boolean insertNewAccountForUser( Account account){
-        return _accountDAOService.insertNewAccountForUser(account);
+    public Account insertNewAccountForUser(Account account){
+        return repository.save(account);
     }
 
     /*

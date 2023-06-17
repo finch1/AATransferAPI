@@ -3,9 +3,12 @@ package com.AATransferAPI.AATransferAPI.AccountModel;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import org.springframework.data.annotation.CreatedDate;
 
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table
@@ -18,58 +21,67 @@ public class Account implements IAccount {
             allocationSize = 1
     )
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
+            strategy = GenerationType.IDENTITY,
             generator = "account_seq"
     )
-    private UUID _accountID;
+    private Long accountID;
+
+    private Date accountDate;
     @NotBlank(message = "Account holder ID is required.")
     @Positive(message = "ID Greater then zero.")
-    private Integer _userID;
-    private Double _balance;
-    private AccountStatusEnum.Status _status;
+    private Long userID;
+    private Double balance;
+    private AccountStatusEnum.Status status;
+    @CreatedDate
+    private LocalDateTime createDate;
+    @NotBlank(message = "Account currency required.")
+    private String currency;
 
-    public Account(@JsonProperty("userID") Integer _userID) {
-        this._accountID = UUID.randomUUID();
-        this._userID = _userID;
-        this._balance = 100.0; // adding funds to test with
-        this._status = AccountStatusEnum.Status.ACTIVE;
+    public Account(@JsonProperty("userID") Long userID,
+                   @JsonProperty("currency") String currency) {
+        this.userID = userID;
+        this.balance = 100.0; // adding funds to test with
+        this.status = AccountStatusEnum.Status.ACTIVE;
+        this.currency = currency;
     }
 
     @Override
-    public UUID get_accountID() {
-        return _accountID;
+    public Long get_accountID() {
+        return accountID;
+    }
+
+    @PrePersist
+    @Override
+    void get_accountDate() {
+        this.accountDate = new Date();
     }
 
     @Override
-    public void set_accountID(UUID _accountID) {
-        this._accountID = _accountID;
-    }
-
-    @Override
-    public Integer get_userID() {
-        return _userID;
-    }
-
-    @Override
-    public void set_userID(Integer _userID) {
-        this._userID = _userID;
+    public Long get_userID() {
+        return userID;
     }
 
     @Override
     public Double get_balance() {
-        return _balance;
+        return balance;
     }
 
     @Override
-    public void set_balance(Double _balance) {
-        this._balance = _balance;
+    public void set_balance(Double balance) {
+        this.balance = balance;
     }
 
+    @Override
     public AccountStatusEnum.Status get_status() {
-        return _status;
+        return status;
     }
 
-    public void set_status(AccountStatusEnum.Status _status) {
-        this._status = _status;
+    @Override
+    public void set_status(AccountStatusEnum.Status status) {
+        this.status = status;
+    }
+
+    public String getCurrency() {
+        return currency;
     }
 }

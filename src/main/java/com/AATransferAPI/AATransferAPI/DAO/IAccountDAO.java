@@ -3,11 +3,9 @@ package com.AATransferAPI.AATransferAPI.DAO;
 import com.AATransferAPI.AATransferAPI.AccountModel.Account;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 public interface IAccountDAO {
-    List<Account> getAllAccountsForUser(Integer userID);
+    List<Account> getAllAccountsForUser(Long userID);
 
     boolean insertNewAccountForUser(Account account);
 

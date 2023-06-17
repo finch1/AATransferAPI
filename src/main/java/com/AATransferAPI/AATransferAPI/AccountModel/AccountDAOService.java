@@ -5,8 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository("MySQLAccounts")
@@ -15,7 +13,7 @@ public class AccountDAOService implements IAccountDAO {
     private List<Account> A_DB = new ArrayList<Account>();
 
     @Override
-    public List<Account> getAllAccountsForUser(Integer userID){
+    public List<Account> getAllAccountsForUser(Long userID){
         return A_DB.stream().filter(a -> a.get_userID().equals(userID)).collect(Collectors.toList());
     }
 
