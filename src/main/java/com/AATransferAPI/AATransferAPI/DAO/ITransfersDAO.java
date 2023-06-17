@@ -1,16 +1,15 @@
 package com.AATransferAPI.AATransferAPI.DAO;
 
-import com.AATransferAPI.AATransferAPI.TransfersModel.Transfers;
-import com.AATransferAPI.AATransferAPI.TransfersModel.TransfersStatusEnum;
+import com.AATransferAPI.AATransferAPI.ModelTransfer.Transfer;
+import com.AATransferAPI.AATransferAPI.ModelTransfer.TransferStatusEnum;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface ITransfersDAO {
 
 
-    List<Transfers> getTransfersForAccount(Long account);
-    TransfersStatusEnum.Status MakeTransfer(Transfers transfers);
+    List<Transfer> getTransfersForAccount(Long account);
+    TransferStatusEnum.Status MakeTransfer(Transfer transfer);
     /*
     List<Transfers> getTransfersForUser(UUID userID);
 

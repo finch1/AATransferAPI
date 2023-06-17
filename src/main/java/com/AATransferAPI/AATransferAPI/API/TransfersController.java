@@ -1,34 +1,32 @@
-package com.AATransferAPI.AATransferAPI.TransfersModel;
+package com.AATransferAPI.AATransferAPI.API;
 
-import com.AATransferAPI.AATransferAPI.AccountModel.Account;
+import com.AATransferAPI.AATransferAPI.ModelTransfer.Transfer;
+import com.AATransferAPI.AATransferAPI.Service.TransferService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "api/v1/transfers")
 public class TransfersController {
 
-    private final TransfersService transfersService;
+    private final TransferService transferService;
 
     @Autowired
-    public TransfersController(TransfersService transfersService) {
-        this.transfersService = transfersService;
+    public TransfersController(TransferService transferService) {
+        this.transferService = transferService;
     }
 
     @GetMapping
-    public List<Transfers> getAllTransfers(){
-        return transfersService.getAllTransfers();
+    public List<Transfer> getAllTransfers(){
+        return transferService.getAllTransfers();
     }
 
     @PostMapping(path = "makePayment")
-    public String MakePayment(@Valid @RequestBody Transfers transfers){
-        return transfersService.MakeTransfer(transfers);
+    public String MakePayment(@Valid @RequestBody Transfer transfer){
+        return transferService.MakeTransfer(transfer);
     }
 
 /*

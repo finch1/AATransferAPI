@@ -1,4 +1,4 @@
-package com.AATransferAPI.AATransferAPI.AccountModel;
+package com.AATransferAPI.AATransferAPI.ModelAccount;
 
 public class AccountStatusEnum {
 

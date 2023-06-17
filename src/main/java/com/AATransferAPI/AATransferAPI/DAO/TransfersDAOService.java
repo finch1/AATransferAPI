@@ -1,35 +1,35 @@
-package com.AATransferAPI.AATransferAPI.TransfersModel;
+package com.AATransferAPI.AATransferAPI.DAO;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.AATransferAPI.AATransferAPI.ModelTransfer.Transfer;
+import com.AATransferAPI.AATransferAPI.ModelTransfer.TransferStatusEnum;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository("MySQLTransfers")
 public class TransfersDAOService implements com.AATransferAPI.AATransferAPI.DAO.ITransfersDAO {
 
-    List<Transfers> T_DB = new ArrayList<>();
+    List<Transfer> T_DB = new ArrayList<>();
 
     @Override
-    public List<Transfers> getTransfersForAccount(Long account){
+    public List<Transfer> getTransfersForAccount(Long account){
 
-        List<Transfers> transfersList = T_DB.stream().
+        List<Transfer> transferList = T_DB.stream().
                 filter(t -> t.get_accountFrom().equals(account) || t.get_accountTo().equals(account)).
                 collect(Collectors.toList());
 
-        return transfersList;
+        return transferList;
     }
 
     @Override
-    public TransfersStatusEnum.Status MakeTransfer(Transfers transfers){
+    public TransferStatusEnum.Status MakeTransfer(Transfer transfer){
 
         // lock until transaction done
-        T_DB.add(transfers);
+        T_DB.add(transfer);
 
-        return TransfersStatusEnum.Status.SUCCESSFUL;
+        return TransferStatusEnum.Status.SUCCESSFUL;
     }
 
     /*

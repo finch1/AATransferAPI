@@ -1,6 +1,6 @@
-package com.AATransferAPI.AATransferAPI.AccountModel;
+package com.AATransferAPI.AATransferAPI.DAO;
 
-import com.AATransferAPI.AATransferAPI.DAO.IAccountDAO;
+import com.AATransferAPI.AATransferAPI.ModelAccount.Account;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

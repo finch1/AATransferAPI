@@ -1,53 +1,49 @@
-package com.AATransferAPI.AATransferAPI.TransfersModel;
+package com.AATransferAPI.AATransferAPI.ModelTransfer;
 
+import com.AATransferAPI.AATransferAPI.Audit.Audit;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import jakarta.validation.constraints.Positive;
+import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table
-@EntityListeners(AuditingEntityListener.class)
-public class Transfers {
+@Table(name = "transfers")
+public class Transfer {
 
     // @NotBlank = The annotated element must not be null and must contain at least one non-whitespace character. Accepts CharSequence.
     // @Min = The annotated element must be a number whose value must be higher or equal to the specified minimum.
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.IDENTITY
-    )
     private UUID transferID;
-    @Column(name = "transferDate")
-    private Date transferDate;
-    @NotBlank(message = "Description of transfer is mandatory.")
+    @Length(min = 3, max = 255, message = "Description of transfer is mandatory.")
     private String transferRef;
-    @NotBlank(message = "Source account is required.")
+    @Positive(message = "Source account is required.")
     private Long accountFrom;
-    @NotBlank(message = "Destination account is required.")
+    @Positive(message = "Destination account is required.")
     private Long accountTo;
     @NotBlank(message = "Destination account is required.")
     private String currency;
     @Min(value = 0, message = "Destination account is required.")
     private Double amount;
-    @CreatedDate
-    private LocalDateTime createdDate;
-    @CreatedBy
-    private String createdBy;
 
-    public Transfers(@JsonProperty("transferRef") String transferRef,
-                     @JsonProperty("accountFrom") Long accountFrom,
-                     @JsonProperty("accountTo") Long accountTo,
-                     @JsonProperty("currency") @NotBlank(message = "Destination account is required.") String currency,
-                     @JsonProperty("amount") Double amount) {
+    @Embedded
+    private Audit audit = new Audit();
 
-        this.transferID = UUID.randomUUID();
+    public Transfer() {
+    }
+
+    public Transfer(@JsonProperty("transferRef") String transferRef,
+                    @JsonProperty("accountFrom") Long accountFrom,
+                    @JsonProperty("accountTo") Long accountTo,
+                    @JsonProperty("currency") String currency,
+                    @JsonProperty("amount") Double amount) {
+
         this.transferRef = transferRef;
         this.accountFrom = accountFrom;
         this.accountTo = accountTo;
@@ -57,11 +53,6 @@ public class Transfers {
 
     public UUID get_transferID() {
         return transferID;
-    }
-
-    @PrePersist
-    void transferDate() {
-        this.transferDate = new Date();
     }
 
     public String get_transferRef() {
@@ -83,4 +74,6 @@ public class Transfers {
     public Double get_amount() {
         return amount;
     }
+
+    public LocalDateTime getCreatedOn() { return audit.getCreatedOn(); };
 }

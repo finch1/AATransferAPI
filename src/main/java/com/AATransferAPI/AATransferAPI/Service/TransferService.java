@@ -1,32 +1,30 @@
-package com.AATransferAPI.AATransferAPI.TransfersModel;
+package com.AATransferAPI.AATransferAPI.Service;
 
-import com.AATransferAPI.AATransferAPI.AccountModel.AccountService;
-import com.AATransferAPI.AATransferAPI.DAO.ITransfersDAO;
-import org.aspectj.lang.annotation.SuppressAjWarnings;
+import com.AATransferAPI.AATransferAPI.ModelTransfer.Transfer;
+import com.AATransferAPI.AATransferAPI.Persistence.ITransferRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
-import java.util.UUID;
 
 @Service
-public class TransfersService {
+public class TransferService {
 
     private final ITransferRepository repository;
 
     @Autowired
-    public TransfersService(@Qualifier("MySQLTransfers") ITransferRepository repository) {
+    public TransferService(@Qualifier("MySQLTransfers") ITransferRepository repository) {
         this.repository = repository;
     }
 
-    public List<Transfers> getAllTransfers(){
-        return repository.getAllTransfers();
+    public List<Transfer> getAllTransfers(){
+        return repository.findAll();
     }
 
-    public String MakeTransfer(Transfers transfers){
-        return repository.MakeTransfer(transfers.get_accountFrom(), transfers.get_accountTo(), transfers.get_amount());
+    public String MakeTransfer(Transfer transfer){
+        return repository.MakeTransfer(transfer.get_accountFrom(), transfer.get_accountTo(), transfer.get_amount(), transfer.get_currency(), transfer.get_transferRef(), transfer.getCreatedOn());
     }
 
     /*

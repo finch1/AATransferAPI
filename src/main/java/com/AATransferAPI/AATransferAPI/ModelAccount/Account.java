@@ -1,41 +1,45 @@
-package com.AATransferAPI.AATransferAPI.AccountModel;
+package com.AATransferAPI.AATransferAPI.ModelAccount;
 
+import com.AATransferAPI.AATransferAPI.Audit.Audit;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.GenericGenerator;
 
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
-@Table
-public class Account implements IAccount {
+@Table(name = "accounts")
+public class Account implements IAccount{
 
     @Id
-    @SequenceGenerator(
-            name = "account_seq",
-            sequenceName = "account_seq",
-            allocationSize = 1
-    )
     @GeneratedValue(
-            strategy = GenerationType.IDENTITY,
-            generator = "account_seq"
+            strategy= GenerationType.AUTO,
+            generator="native"
+    )
+    @GenericGenerator(
+            name = "native",
+            strategy = "native"
     )
     private Long accountID;
-
-    private Date accountDate;
-    @NotBlank(message = "Account holder ID is required.")
+    //private Date accountDate;
     @Positive(message = "ID Greater then zero.")
     private Long userID;
+    @Positive
     private Double balance;
+    @NotNull
     private AccountStatusEnum.Status status;
-    @CreatedDate
-    private LocalDateTime createDate;
+    //@CreatedDate
+    //private LocalDateTime createDate;
     @NotBlank(message = "Account currency required.")
     private String currency;
+
+    @Embedded
+    private Audit audit = new Audit();
+
+    public Account() {
+    }
 
     public Account(@JsonProperty("userID") Long userID,
                    @JsonProperty("currency") String currency) {
@@ -50,11 +54,8 @@ public class Account implements IAccount {
         return accountID;
     }
 
-    @PrePersist
-    @Override
-    void get_accountDate() {
-        this.accountDate = new Date();
-    }
+    //@Override
+    //void get_accountDate() {this.accountDate = new Date();}
 
     @Override
     public Long get_userID() {
@@ -81,7 +82,13 @@ public class Account implements IAccount {
         this.status = status;
     }
 
+    @Override
     public String getCurrency() {
         return currency;
+    }
+
+    @Override
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 }

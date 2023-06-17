@@ -1,24 +1,26 @@
-package com.AATransferAPI.AATransferAPI.TransfersModel;
+package com.AATransferAPI.AATransferAPI.DAO;
 
 
+import com.AATransferAPI.AATransferAPI.Persistence.ITransferRepository;
+import com.AATransferAPI.AATransferAPI.ModelTransfer.Transfer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 
 import java.util.List;
 
-public class TransferRepository implements ITransfersRepository{
-
-    private final ITransfersRepository repository;
+public class TransferRepository{
+/*
+    private final ITransferRepository repository;
 
     @Autowired
-    public TransferRepository( ITransfersRepository repository) {
+    public TransferRepository( ITransferRepository repository) {
         this.repository = repository;
     }
 
-    public List<Transfers> getAllTransfers(){
+    public List<Transfer> getAllTransfers(){
         return  repository.findAll();
     }
+    */
 
 //        // do accounts exist
 //        if(_accountService.verifyAccountsForTransfer(transfer)){
@@ -30,6 +32,6 @@ public class TransferRepository implements ITransfersRepository{
 //            // send notification (handle event) https://www.google.com/search?client=firefox-b-d&q=c%23+events+in+java
 
         //return TransfersStatusEnum.Status.SUCCESSFUL;
-    }
+   // }
 
 }

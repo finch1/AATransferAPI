@@ -1,6 +1,6 @@
 package com.AATransferAPI.AATransferAPI.DAO;
 
-import com.AATransferAPI.AATransferAPI.AccountModel.Account;
+import com.AATransferAPI.AATransferAPI.ModelAccount.Account;
 
 import java.util.List;
 

@@ -1,16 +1,14 @@
-package com.AATransferAPI.AATransferAPI.AccountModel;
+package com.AATransferAPI.AATransferAPI.API;
 
+import com.AATransferAPI.AATransferAPI.ModelAccount.Account;
+import com.AATransferAPI.AATransferAPI.Service.AccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @RequestMapping(path="api/v1/account")
@@ -24,8 +22,13 @@ public class AccountController {
     }
 
     @GetMapping
-    public ResponseEntity<String> welcome(){
-        return new ResponseEntity<String>("Welcome", HttpStatus.OK);
+    public ResponseEntity<List<Account>> getAllAccounts(){
+        List<Account> account = accountService.getAllAccounts();
+
+        if(account.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
     @GetMapping(path = "{userID}")
@@ -44,7 +47,7 @@ public class AccountController {
     // @RequestBody = convert JSON payload to java object
     // @Valid = checks the annotations in the object itself
     @PostMapping
-    public ResponseEntity<String> insertNewAccountForUser(@RequestBody Account account){ //@Valid @NotNull
+    public ResponseEntity<String> insertNewAccountForUser(@Valid @RequestBody Account account){
 
         if(accountService.insertNewAccountForUser(account).get_accountID() != null)
             return new ResponseEntity<>("New account created.", HttpStatus.OK);

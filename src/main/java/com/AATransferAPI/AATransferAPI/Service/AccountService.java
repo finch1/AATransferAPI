@@ -1,12 +1,13 @@
-package com.AATransferAPI.AATransferAPI.AccountModel;
+package com.AATransferAPI.AATransferAPI.Service;
 
+import com.AATransferAPI.AATransferAPI.ModelAccount.Account;
+import com.AATransferAPI.AATransferAPI.Persistence.IAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class AccountService {
@@ -14,10 +15,12 @@ public class AccountService {
     private final IAccountRepository repository;
 
     @Autowired
-    public AccountService(@Qualifier("MySQLTransfers") IAccountRepository repository) {
+    public AccountService(@Qualifier("MySQLAccount") IAccountRepository repository) {
         this.repository = repository;
     }
 
+    // Methods
+    public List<Account> getAllAccounts() {return repository.findAll(); };
     public Optional<Account> getAllAccountsByID(Long accountID){
         return repository.findById(accountID);
     }
