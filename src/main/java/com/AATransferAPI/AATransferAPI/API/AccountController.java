@@ -36,7 +36,7 @@ public class AccountController {
             map.clear();
             map.put("status", 0);
             map.put("message", "Data is not found");
-            return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(map, HttpStatus.NO_CONTENT);
         }
     }
 
@@ -77,7 +77,7 @@ public class AccountController {
     // When the target argument fails to pass the validation, Spring Boot throws a MethodArgumentNotValidException exception.
     // @RequestBody = convert JSON payload to java object
     // @Valid = checks the annotations in the object itself
-    @PostMapping
+    @PostMapping(path = "/save")
     public ResponseEntity<?> insertNewAccountForUser(@Valid @RequestBody Account account){
 
         Map<String, Object> map = new LinkedHashMap<String, Object>();

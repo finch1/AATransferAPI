@@ -1,6 +1,7 @@
 package com.AATransferAPI.AATransferAPI.Service;
 
 import com.AATransferAPI.AATransferAPI.ModelAccount.Account;
+import com.AATransferAPI.AATransferAPI.ModelAccount.AccountStatusEnum;
 import com.AATransferAPI.AATransferAPI.Persistence.IAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,21 +28,25 @@ public class AccountService {
 
     public List<Account> getAllAccountsForUser(Long userID){
         return repository.findAllByUserID(userID);
-
     }
 
     public Account insertNewAccountForUser(Account account){
         return repository.save(account);
     }
 
-    /*
-    public Optional<Account> updateAccountDetailsOfUser(UUID userID, Account account){
-        return _accountDAOService.updateAccountDetailsOfUser(userID, account);
+    public Optional<Account> blockAccount(Long accountID){
+        repository.updateStatus(accountID, AccountStatusEnum.Status.BLOCKED);
+        return repository.findById(accountID);
     }
 
-    public Optional<Account> deleteAllAccountsOfUser(UUID userID){
-            return _accountDAOService.deleteAccountOfUser(userID);
+    public Optional<Account> closeAccount(Long accountID){
+        repository.updateStatus(accountID, AccountStatusEnum.Status.CLOSED);
+        return repository.findById(accountID);
     }
-    */
+
+    public void deleteAllAccountsOfUser(Long accountID){
+            repository.deleteById(accountID);
+    }
+
 
 }
