@@ -1,77 +1,54 @@
 package com.AATransferAPI.AATransferAPI.API;
 
 import com.AATransferAPI.AATransferAPI.ModelAccount.Account;
+import com.AATransferAPI.AATransferAPI.ModelAccount.AccountModelAssembler;
+import com.AATransferAPI.AATransferAPI.ModelAccount.AccountStatus;
 import com.AATransferAPI.AATransferAPI.Service.AccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path="api/v1/accounts")
 public class AccountController {
 
     private final AccountService accountService;
+    private final AccountModelAssembler assembler;
 
     @Autowired
-    public AccountController(AccountService accountService) {
+    public AccountController(AccountService accountService, AccountModelAssembler assembler) {
         this.accountService = accountService;
+        this.assembler = assembler;
     }
 
     @GetMapping
     public ResponseEntity<?> getAllAccounts(){
-        Map<String, Object> map = new LinkedHashMap<String, Object>();
         List<Account> accountList = accountService.getAllAccounts();
-        if (!accountList.isEmpty()) {
-            map.put("status", 1);
-            map.put("data", accountList);
-            return new ResponseEntity<>(map, HttpStatus.OK);
-        } else {
-            map.clear();
-            map.put("status", 0);
-            map.put("message", "Data is not found");
-            return new ResponseEntity<>(map, HttpStatus.NO_CONTENT);
-        }
+        return commonResponse(Optional.empty(), accountList, HttpStatus.NO_CONTENT);
     }
 
     @GetMapping(path = "/user/{userID}")
     public ResponseEntity<?> getAllAccountsForUser(@PathVariable("userID")Long userID){
-
-        Map<String, Object> map = new LinkedHashMap<String, Object>();
         List<Account> accountList = accountService.getAllAccountsForUser(userID);
-        if (!accountList.isEmpty()) {
-            map.put("status", 1);
-            map.put("data", accountList);
-            return new ResponseEntity<>(map, HttpStatus.OK);
-        } else {
-            map.clear();
-            map.put("status", 0);
-            map.put("message", "Data is not found");
-            return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
-        }
+        return commonResponse(Optional.empty(), accountList, HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(path = "/account/{accountID}")
-    public ResponseEntity<?> getAccount(@PathVariable("accountID")Long accountID){
-
-        Map<String, Object> map = new LinkedHashMap<String, Object>();
-        Optional<Account> accountO = accountService.getAccount(accountID);
-        if (!accountO.isEmpty()) {
-            map.put("status", 1);
-            map.put("data", accountO);
-            return new ResponseEntity<>(map, HttpStatus.OK);
-        } else {
-            map.clear();
-            map.put("status", 0);
-            map.put("message", "Data is not found");
-            return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<?> getAccountByID(@PathVariable("accountID")Long accountID){
+        Optional<Account> account = accountService.getAccountByID(accountID);
+        return commonResponse(account, null, HttpStatus.NOT_FOUND);
     }
 
     // When the target argument fails to pass the validation, Spring Boot throws a MethodArgumentNotValidException exception.
@@ -80,11 +57,21 @@ public class AccountController {
     @PostMapping(path = "/save")
     public ResponseEntity<?> insertNewAccountForUser(@Valid @RequestBody Account account){
 
+        Account savedAccount = accountService.insertNewAccountForUser(account);
+
+        // leaving this as is cause it shows example of created(location). Plus save returns Account not Optional<T>
         Map<String, Object> map = new LinkedHashMap<String, Object>();
-        if(accountService.insertNewAccountForUser(account).get_accountID() != null) {
+        if(savedAccount.get_accountID() != null) {
+
+            EntityModel<Account> entityModel = assembler.toModel(savedAccount);
+
+            // build response
             map.put("status", 1);
             map.put("message", "Record is Saved Successfully!");
-            return new ResponseEntity<>(map, HttpStatus.CREATED);
+            return ResponseEntity
+                    .created(
+                            linkTo(methodOn(AccountController.class)
+                                    .insertNewAccountForUser(savedAccount)).toUri()).body(entityModel);
         }else {
             map.clear();
             map.put("status", 0);
@@ -92,55 +79,54 @@ public class AccountController {
             return new ResponseEntity<>(map, HttpStatus.NOT_IMPLEMENTED);
         }
     }
-/*
-    @PutMapping("/update/{accountID}{status}")
-    public ResponseEntity<?> updateUserById(@PathVariable Long accountID, @Valid @RequestBody Account account) {
+
+    // Partial update, status only
+    @PatchMapping(path = "/{accountid}/close")
+    public ResponseEntity<?> closeAccount(@PathVariable("accountid") Long accountID){
+        return updateAccountStatus(accountID, AccountStatus.CLOSED);
+    }
+    @PatchMapping(path = "/{accountid}/block")
+    public ResponseEntity<?> blockAccount(@PathVariable("accountid") Long accountID){
+        return updateAccountStatus(accountID, AccountStatus.BLOCKED);
+    }
+    @PatchMapping(path = "/{accountid}/reactivate")
+    public ResponseEntity<?> reactivateAccount(@PathVariable("accountid") Long accountID){
+        return updateAccountStatus(accountID, AccountStatus.ACTIVE);
+    }
+
+    // common logic to update account status
+    private ResponseEntity<?> updateAccountStatus(Long accountID, AccountStatus statusEnum){
+        Optional<Account> account = accountService.updateAccountStatus(accountID, statusEnum);
+        return commonResponse(account, null, HttpStatus.NOT_IMPLEMENTED);
+    }
+
+    // common logic to build response
+    private ResponseEntity<?> commonResponse(Optional<Account> account, List<Account> listAccounts, HttpStatus failureStatus) {
         Map<String, Object> map = new LinkedHashMap<String, Object>();
-        try {
-            Account oldAccount = accountService.findByAccountId(accountID);
-            user.setUserName(userDetail.getUserName());
-            user.setMobileNo(userDetail.getMobileNo());
-            user.setEmailId(userDetail.getEmailId());
-            user.setCity(userDetail.getCity());
-            user.setPassword(userDetail.getPassword());
-            userService.save(user);
+
+        if (!account.isEmpty()) {
+            EntityModel<Account> entityModel = assembler.toModel(account.get());
+            // build response
             map.put("status", 1);
-            map.put("data", userService.findById(id));
+            map.put("data", entityModel);
             return new ResponseEntity<>(map, HttpStatus.OK);
-        } catch (Exception ex) {
+        } else if (!listAccounts.isEmpty()) {
+            // add links for each account
+            List<EntityModel<Account>> listEMAccount = listAccounts.stream().map(assembler::toModel).collect(Collectors.toList());
+
+            // add links for response
+            CollectionModel<EntityModel<Account>> collectionModel = CollectionModel.of(listEMAccount);
+            collectionModel.add(linkTo(methodOn(AccountController.class).getAllAccounts()).withSelfRel());
+
+            // build response
+            map.put("status", 1);
+            map.put("data", collectionModel);
+            return new ResponseEntity<>(map, HttpStatus.OK);
+        } else {
             map.clear();
             map.put("status", 0);
-            map.put("message", "Data is not found");
-            return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
+            map.put("message", "Account Not Updated");
+            return new ResponseEntity<>(map, failureStatus);
         }
     }
-
-
-    @PutMapping(path = "{userID}")
-    public ResponseEntity<String> updateAccountDetailsOfUser(@PathVariable("userID") UUID userID, @Valid @RequestBody Account account){
-
-        Optional<Account> upd_account = accountService.updateAccountDetailsOfUser(userID, account);
-
-        if(upd_account.isEmpty())
-            return new ResponseEntity<>("Failed to update account.", HttpStatus.NOT_IMPLEMENTED);
-
-        return new ResponseEntity<>("Account updated." + upd_account.get().get_accountID().toString(), HttpStatus.OK);
-
-    }
-
-    @DeleteMapping(path = "{userID}")
-    public ResponseEntity<String> deleteAllAccountsOfUser(@PathVariable("userID") UUID userID){
-
-        Optional<Account> del_account = accountService.deleteAllAccountsOfUser(userID);
-
-        if(del_account.isEmpty())
-            return new ResponseEntity<>("Failed to delete account/s.", HttpStatus.NOT_IMPLEMENTED);
-
-        return new ResponseEntity<>("Account/s deleted." + del_account.get().get_accountID().toString(), HttpStatus.OK);
-    }
-        // TODO request account for accountID
-        // TODO delete one account by userID and accountID
-     */
-
-
 }

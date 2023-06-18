@@ -8,6 +8,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "accounts")
@@ -18,23 +20,17 @@ public class Account implements IAccount{
             strategy= GenerationType.AUTO,
             generator="native"
     )
-    @GenericGenerator(
-            name = "native",
-            strategy = "native"
-    )
+    @GenericGenerator( name = "native")
     private Long accountID;
-    //private Date accountDate;
+
     @Positive(message = "ID Greater then zero.")
     private Long userID;
     @Positive
     private Double balance;
-    @NotNull
-    private AccountStatusEnum.Status status;
-    //@CreatedDate
-    //private LocalDateTime createDate;
+    @Enumerated(EnumType.ORDINAL)
+    private AccountStatus status = AccountStatus.ACTIVE;
     @NotBlank(message = "Account currency required.")
     private String currency;
-
     @Embedded
     private Audit audit = new Audit();
 
@@ -45,7 +41,6 @@ public class Account implements IAccount{
                    @JsonProperty("currency") String currency) {
         this.userID = userID;
         this.balance = 100.0; // adding funds to test with
-        this.status = AccountStatusEnum.Status.ACTIVE;
         this.currency = currency;
     }
 
@@ -73,12 +68,12 @@ public class Account implements IAccount{
     }
 
     @Override
-    public AccountStatusEnum.Status get_status() {
+    public AccountStatus get_status() {
         return status;
     }
 
     @Override
-    public void set_status(AccountStatusEnum.Status status) {
+    public void set_status(AccountStatus status) {
         this.status = status;
     }
 

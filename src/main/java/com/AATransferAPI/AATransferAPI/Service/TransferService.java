@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -24,7 +25,11 @@ public class TransferService {
     }
 
     public String MakeTransfer(Transfer transfer){
-        return repository.MakeTransfer(transfer.get_accountFrom(), transfer.get_accountTo(), transfer.get_amount(), transfer.get_currency(), transfer.get_transferRef(), transfer.getCreatedOn());
+        return repository.MakeTransfer(transfer.get_accountFrom(),
+                                        transfer.get_accountTo(),
+                                        transfer.get_amount(),
+                                        transfer.get_transferRef(),
+                                        LocalDateTime.now()); // not sure weather the now() has any repercussions
     }
 
     /*

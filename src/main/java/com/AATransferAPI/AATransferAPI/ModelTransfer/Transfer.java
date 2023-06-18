@@ -41,13 +41,11 @@ public class Transfer {
     public Transfer(@JsonProperty("transferRef") String transferRef,
                     @JsonProperty("accountFrom") Long accountFrom,
                     @JsonProperty("accountTo") Long accountTo,
-                    @JsonProperty("currency") String currency,
                     @JsonProperty("amount") Double amount) {
 
         this.transferRef = transferRef;
         this.accountFrom = accountFrom;
         this.accountTo = accountTo;
-        this.currency = currency;
         this.amount = amount;
     }
 
@@ -74,6 +72,4 @@ public class Transfer {
     public Double get_amount() {
         return amount;
     }
-
-    public LocalDateTime getCreatedOn() { return audit.getCreatedOn(); };
 }

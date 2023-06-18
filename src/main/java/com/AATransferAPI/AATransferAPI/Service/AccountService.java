@@ -1,7 +1,7 @@
 package com.AATransferAPI.AATransferAPI.Service;
 
 import com.AATransferAPI.AATransferAPI.ModelAccount.Account;
-import com.AATransferAPI.AATransferAPI.ModelAccount.AccountStatusEnum;
+import com.AATransferAPI.AATransferAPI.ModelAccount.AccountStatus;
 import com.AATransferAPI.AATransferAPI.Persistence.IAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,31 +22,25 @@ public class AccountService {
 
     // Methods
     public List<Account> getAllAccounts() {return repository.findAll(); };
-    public Optional<Account> getAllAccountsByID(Long accountID){
-        return repository.findById(accountID);
-    }
 
     public List<Account> getAllAccountsForUser(Long userID){
         return repository.findAllByUserID(userID);
+    }
+
+    public Optional<Account> getAccountByID(Long accountID){
+        return repository.findById(accountID);
     }
 
     public Account insertNewAccountForUser(Account account){
         return repository.save(account);
     }
 
-    public Optional<Account> blockAccount(Long accountID){
-        repository.updateStatus(accountID, AccountStatusEnum.Status.BLOCKED);
-        return repository.findById(accountID);
+    public Optional<Account> updateAccountStatus(Long accountID, AccountStatus status){
+        // update query did not work on enum.
+        Optional<Account> accountToUpdate = repository.findById(accountID);
+        accountToUpdate.get().set_status(status);
+        repository.saveAndFlush(accountToUpdate.get());
+        return accountToUpdate;
     }
-
-    public Optional<Account> closeAccount(Long accountID){
-        repository.updateStatus(accountID, AccountStatusEnum.Status.CLOSED);
-        return repository.findById(accountID);
-    }
-
-    public void deleteAllAccountsOfUser(Long accountID){
-            repository.deleteById(accountID);
-    }
-
 
 }

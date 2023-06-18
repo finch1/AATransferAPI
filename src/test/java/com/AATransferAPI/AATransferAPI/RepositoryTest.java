@@ -38,7 +38,6 @@ public class RepositoryTest {
         transferRepository.MakeTransfer(savedAccount_1.get_accountID(),
                                         savedAccount_2.get_accountID(),
                                         100.0,
-                                        "EUR",
                                         "Transfer Test Scenario",
                                         LocalDateTime.now());
 

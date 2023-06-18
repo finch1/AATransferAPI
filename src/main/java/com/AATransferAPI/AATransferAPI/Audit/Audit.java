@@ -1,5 +1,6 @@
 package com.AATransferAPI.AATransferAPI.Audit;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -10,10 +11,10 @@ import java.time.LocalDateTime;
 @Embeddable
 public class Audit {
 
-    @NotNull
+    // @Column(name = "createdOn", nullable = false, updatable = false)
     private LocalDateTime createdOn;
 
-    @NotNull
+    // @Column(name = "createdBy", nullable = false, updatable = false)
     private String createdBy;
 
     private LocalDateTime updatedOn;

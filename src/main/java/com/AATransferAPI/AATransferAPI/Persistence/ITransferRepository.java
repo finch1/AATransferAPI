@@ -22,7 +22,6 @@ public interface ITransferRepository extends JpaRepository<Transfer, UUID> {
     String MakeTransfer(@Param("from_account") Long from_account,
                         @Param("to_account") Long to_account,
                         @Param("amount") Double amount,
-                        @Param("currency") String currency,
                         @Param("transferRef") String transferRef,
                         @Param("created_On") LocalDateTime created_On);
 
