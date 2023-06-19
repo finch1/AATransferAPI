@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+
+  mysqldb:
+    image: mysql:latest
+    restart: always
+    ports:
+      - 3306:3306
+    networks:
+      - springmysql-net
+    environment:
+      - MYSQL_ROOT_PASSWORD=simple
+      - MYSQL_DATABASE=OperationsDB
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pass1234
+
+  server:
+    image: myapi:1.0
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysqldb
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/OperationsDB?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=pass1234
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    networks:
+      - springmysql-net
+    depends_on:
+      - mysqldb
+
+networks:
+  springmysql-net:
