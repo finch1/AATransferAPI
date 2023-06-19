@@ -14,10 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -42,7 +39,7 @@ public class AccountController {
     @GetMapping(path = "/account/{accountID}")
     public ResponseEntity<?> getAccountByID(@PathVariable("accountID")Long accountID){
         Optional<Account> account = accountService.getAccountByID(accountID);
-        return commonResponse(account, null, HttpStatus.NOT_FOUND, "No data found.");
+        return commonResponse(account, Collections.emptyList(), HttpStatus.NOT_FOUND, "No data found.");
     }
 
     @GetMapping(path = "/user/{userID}")
@@ -59,21 +56,16 @@ public class AccountController {
 
         Account savedAccount = accountService.insertNewAccountForUser(account);
 
-        // leaving this as is cause it shows example of created(location). Plus save returns Account not Optional<T>
-        Map<String, Object> map = new LinkedHashMap<String, Object>();
         if(savedAccount.get_accountID() != null) {
 
             EntityModel<Account> entityModel = assembler.toModel(savedAccount);
 
-            // build response
-            map.put("status", 1);
-            map.put("message", "Record is Saved Successfully!");
             return ResponseEntity
                     .created(
                             linkTo(methodOn(AccountController.class)
                                     .insertNewAccountForUser(savedAccount)).toUri()).body(entityModel);
         }else {
-            map.clear();
+            Map<String, Object> map = new LinkedHashMap<String, Object>();
             map.put("status", 0);
             map.put("message", "Failed to create new account.");
             return new ResponseEntity<>(map, HttpStatus.NOT_IMPLEMENTED);
@@ -97,7 +89,7 @@ public class AccountController {
     // common logic to update account status
     private ResponseEntity<?> updateAccountStatus(Long accountID, AccountStatus statusEnum){
         Optional<Account> account = accountService.updateAccountStatus(accountID, statusEnum);
-        return commonResponse(account, null, HttpStatus.NOT_IMPLEMENTED, "Account not updated.");
+        return commonResponse(account, Collections.emptyList(), HttpStatus.NOT_IMPLEMENTED, "Account not updated.");
     }
 
     // common logic to build response

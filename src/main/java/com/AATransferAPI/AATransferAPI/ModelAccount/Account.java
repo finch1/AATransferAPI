@@ -40,9 +40,10 @@ public class Account implements IAccount{
     }
 
     public Account(@JsonProperty("userID") Long userID,
-                   @JsonProperty("currency") String currency) {
+                   @JsonProperty("currency") String currency,
+                   @JsonProperty("balance") Double balance) {
         this.userID = userID;
-        this.balance = 100.0; // adding funds to test with
+        this.balance = balance; // adding funds to test with
         this.currency = currency;
     }
 

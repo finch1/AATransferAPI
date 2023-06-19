@@ -1,12 +1,9 @@
 package com.AATransferAPI.AATransferAPI.API;
 
-import com.AATransferAPI.AATransferAPI.ModelAccount.Account;
 import com.AATransferAPI.AATransferAPI.ModelTransfer.Transfer;
 import com.AATransferAPI.AATransferAPI.Service.TransferService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +12,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -49,27 +45,23 @@ public class TransfersController {
         return commonResponse(Optional.empty(), transfersList, HttpStatus.NO_CONTENT, "No data found.");
     }
 
-    @PostMapping(path = "makePayment")
-    public ResponseEntity<?> MakePayment(@Valid @RequestBody Transfer transfer){
-        String message = transferService.MakeTransfer(transfer);
-
+    @PostMapping(path = "makeTransfer")
+    public ResponseEntity<?> makeTransfer(@Valid @RequestBody Transfer transfer){
         Map<String, Object> map = new LinkedHashMap<String, Object>();
 
-        if(message.contains("")) {
+        String message = transferService.makeTransfer(transfer);
 
-            // build response
+        if(message.contains("success")){
             map.put("status", 1);
             map.put("message", message);
-            return ResponseEntity
-                    .created(
-                            linkTo(methodOn(TransfersController.class)
-                                    .MakePayment(transfer)).toUri()).body(null);
-        }else {
-            map.clear();
+            return new ResponseEntity<>(map, HttpStatus.CREATED);
+        }else{
+            map.clear();;
             map.put("status", 0);
             map.put("message", message);
             return new ResponseEntity<>(map, HttpStatus.NOT_IMPLEMENTED);
         }
+
     }
 
     // common logic to build response

@@ -30,15 +30,14 @@ public class Transfer {
     @Positive(message = "Destination account is required.")
     @Column(nullable = false, updatable = false)
     private Long accountTo;
-    @NotBlank(message = "Destination account is required.")
     @Column(nullable = false, updatable = false)
     private String currency;
-    @Min(value = 0, message = "Destination account is required.")
+    @Min(value = 0, message = "Transfer amount is required.")
     @Column(nullable = false, updatable = false)
     private Double amount;
 
-    @Embedded
-    private Audit audit = new Audit();
+    @Column(updatable = false)
+    private LocalDateTime createdOn;
 
     public Transfer() {
     }
@@ -52,6 +51,7 @@ public class Transfer {
         this.accountFrom = accountFrom;
         this.accountTo = accountTo;
         this.amount = amount;
+        this.createdOn = LocalDateTime.now();
     }
 
     public UUID get_transferID() {
@@ -76,5 +76,9 @@ public class Transfer {
 
     public Double get_amount() {
         return amount;
+    }
+
+    public LocalDateTime getCreatedOn() {
+        return createdOn;
     }
 }

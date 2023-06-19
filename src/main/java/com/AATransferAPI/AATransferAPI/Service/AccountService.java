@@ -23,12 +23,12 @@ public class AccountService {
     // Methods
     public List<Account> getAllAccounts() {return repository.findAll(); };
 
-    public List<Account> getAllAccountsForUser(Long userID){
-        return repository.findAllByUserID(userID);
-    }
-
     public Optional<Account> getAccountByID(Long accountID){
         return repository.findById(accountID);
+    }
+
+    public List<Account> getAllAccountsForUser(Long userID){
+        return repository.findAllByUserID(userID);
     }
 
     public Account insertNewAccountForUser(Account account){

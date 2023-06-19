@@ -1,1 +1,90 @@
-https://google.com/
+### Get all accounts
+GET http://localhost:8080/api/v1/accounts
+# $ curl -v localhost:8080/api/v1/accounts
+
+### Get one account by account ID
+GET http://localhost:8080/api/v1/accounts/account/1
+### Bad Request
+GET http://localhost:8080/api/v1/accounts/account/10
+
+### Get all accounts for user
+GET http://localhost:8080/api/v1/accounts/user/1
+# $ curl -v localhost:8080/api/v1/accounts/user/
+### Bad Request
+GET http://localhost:8080/api/v1/accounts/user/10
+
+### Create New Account
+POST http://localhost:8080/api/v1/accounts/save
+Content-Type: application/json
+
+{
+    "userID":1,
+    "currency":"EUR",
+    "balance":100.0
+}
+
+### Bad Request
+POST http://localhost:8080/api/v1/accounts/save
+Content-Type: application/json
+
+{
+    "userID":1,
+    "currency":"EUR"
+}
+
+### Update Account = Block
+PATCH http://localhost:8080/api/v1/accounts/account/block?id=1
+### Bad Request
+PATCH http://localhost:8080/api/v1/accounts/account/block
+### Update Account = Reactivate
+PATCH http://localhost:8080/api/v1/accounts/account/reactivate?id=1
+### Bad Request
+PATCH http://localhost:8080/api/v1/accounts/account/reactivate
+### Update Account = Close
+PATCH http://localhost:8080/api/v1/accounts/account/close?id=1
+### Bad Request
+PATCH http://localhost:8080/api/v1/accounts/account/close
+
+
+### Get all transfers
+GET http://localhost:8080/api/v1/transfers
+### Bad Request
+GET http://localhost:8080/api/v1/transfers/
+### Get all transfers for account
+GET http://localhost:8080/api/v1/transfers/account/1
+### Bad Request
+GET http://localhost:8080/api/v1/transfers/account/10
+### Get all transfers for user
+GET http://localhost:8080/api/v1/transfers/user/1
+### Bad Request
+GET http://localhost:8080/api/v1/transfers/user/10
+### Create Payment
+POST http://localhost:8080/api/v1/transfers/makeTransfer
+Content-Type: application/json
+
+{
+    "transferRef":"test transfer",
+    "accountFrom":1,
+    "accountTo":2,
+    "currency":"EUR",
+    "amount":5.0
+}
+### Bad Request
+POST http://localhost:8080/api/v1/transfers/makeTransfer
+Content-Type: application/json
+
+{
+    "transferRef":"test transfer",
+    "accountFrom":3,
+    "accountTo":4,
+    "currency":"EUR",
+}
+
+
+# the $ at the beginning signifies that what follows it is a terminal command:
+# the -v signifies verbose output
+$ curl -v localhost:8080/api/v1/account/1
+
+$ curl -X POST localhost:8080/employees -H 'Content-type:application/json' -d '{"name": "Samwise Gamgee", "role": "gardener"}'
+
+$ curl -X PUT localhost:8080/employees/3 -H 'Content-type:application/json' -d '{"name": "Samwise Gamgee", "role": "ring bearer"}'

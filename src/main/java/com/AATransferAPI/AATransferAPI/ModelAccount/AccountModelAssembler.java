@@ -7,8 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 
-import java.util.Objects;
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -41,7 +39,7 @@ public class AccountModelAssembler implements RepresentationModelAssembler<Accou
 
         // make transfer
         accountModel.add(linkTo(methodOn(TransfersController.class)
-                .MakePayment(new Transfer()))
+                .makeTransfer(new Transfer()))
                 .withRel("collection"));
 
         return accountModel;
