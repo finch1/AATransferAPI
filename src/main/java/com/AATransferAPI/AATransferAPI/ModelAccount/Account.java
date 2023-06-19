@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 
 
 @Entity
-@Table(name = "accounts")
+@Table(name = "accounts",
+        indexes = {@Index(name = "IX_accounts_user_ID",  columnList="userID", unique = false)})
 public class Account implements IAccount{
 
     @Id

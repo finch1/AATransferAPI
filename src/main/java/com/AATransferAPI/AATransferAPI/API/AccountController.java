@@ -36,19 +36,19 @@ public class AccountController {
     @GetMapping
     public ResponseEntity<?> getAllAccounts(){
         List<Account> accountList = accountService.getAllAccounts();
-        return commonResponse(Optional.empty(), accountList, HttpStatus.NO_CONTENT);
+        return commonResponse(Optional.empty(), accountList, HttpStatus.NO_CONTENT, "No data found.");
     }
 
     @GetMapping(path = "/user/{userID}")
     public ResponseEntity<?> getAllAccountsForUser(@PathVariable("userID")Long userID){
         List<Account> accountList = accountService.getAllAccountsForUser(userID);
-        return commonResponse(Optional.empty(), accountList, HttpStatus.NOT_FOUND);
+        return commonResponse(Optional.empty(), accountList, HttpStatus.NOT_FOUND, "No data found.");
     }
 
     @GetMapping(path = "/account/{accountID}")
     public ResponseEntity<?> getAccountByID(@PathVariable("accountID")Long accountID){
         Optional<Account> account = accountService.getAccountByID(accountID);
-        return commonResponse(account, null, HttpStatus.NOT_FOUND);
+        return commonResponse(account, null, HttpStatus.NOT_FOUND, "No data found.");
     }
 
     // When the target argument fails to pass the validation, Spring Boot throws a MethodArgumentNotValidException exception.
@@ -97,11 +97,11 @@ public class AccountController {
     // common logic to update account status
     private ResponseEntity<?> updateAccountStatus(Long accountID, AccountStatus statusEnum){
         Optional<Account> account = accountService.updateAccountStatus(accountID, statusEnum);
-        return commonResponse(account, null, HttpStatus.NOT_IMPLEMENTED);
+        return commonResponse(account, null, HttpStatus.NOT_IMPLEMENTED, "Account not updated.");
     }
 
     // common logic to build response
-    private ResponseEntity<?> commonResponse(Optional<Account> account, List<Account> listAccounts, HttpStatus failureStatus) {
+    private ResponseEntity<?> commonResponse(Optional<Account> account, List<Account> listAccounts, HttpStatus failureStatus, String failureMessage) {
         Map<String, Object> map = new LinkedHashMap<String, Object>();
 
         if (!account.isEmpty()) {
@@ -125,7 +125,7 @@ public class AccountController {
         } else {
             map.clear();
             map.put("status", 0);
-            map.put("message", "Account Not Updated");
+            map.put("message", failureMessage);
             return new ResponseEntity<>(map, failureStatus);
         }
     }
