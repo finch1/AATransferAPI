@@ -39,16 +39,16 @@ public class AccountController {
         return commonResponse(Optional.empty(), accountList, HttpStatus.NO_CONTENT, "No data found.");
     }
 
-    @GetMapping(path = "/user/{userID}")
-    public ResponseEntity<?> getAllAccountsForUser(@PathVariable("userID")Long userID){
-        List<Account> accountList = accountService.getAllAccountsForUser(userID);
-        return commonResponse(Optional.empty(), accountList, HttpStatus.NOT_FOUND, "No data found.");
-    }
-
     @GetMapping(path = "/account/{accountID}")
     public ResponseEntity<?> getAccountByID(@PathVariable("accountID")Long accountID){
         Optional<Account> account = accountService.getAccountByID(accountID);
         return commonResponse(account, null, HttpStatus.NOT_FOUND, "No data found.");
+    }
+
+    @GetMapping(path = "/user/{userID}")
+    public ResponseEntity<?> getAllAccountsForUser(@PathVariable("userID")Long userID){
+        List<Account> accountList = accountService.getAllAccountsForUser(userID);
+        return commonResponse(Optional.empty(), accountList, HttpStatus.NOT_FOUND, "No data found.");
     }
 
     // When the target argument fails to pass the validation, Spring Boot throws a MethodArgumentNotValidException exception.
@@ -81,16 +81,16 @@ public class AccountController {
     }
 
     // Partial update, status only
-    @PatchMapping(path = "/{accountid}/close")
-    public ResponseEntity<?> closeAccount(@PathVariable("accountid") Long accountID){
+    @PatchMapping(path = "/account/close")
+    public ResponseEntity<?> closeAccount(@RequestParam("id") Long accountID){
         return updateAccountStatus(accountID, AccountStatus.CLOSED);
     }
-    @PatchMapping(path = "/{accountid}/block")
-    public ResponseEntity<?> blockAccount(@PathVariable("accountid") Long accountID){
+    @PatchMapping(path = "/account/block")
+    public ResponseEntity<?> blockAccount(@RequestParam("id") Long accountID){
         return updateAccountStatus(accountID, AccountStatus.BLOCKED);
     }
-    @PatchMapping(path = "/{accountid}/reactivate")
-    public ResponseEntity<?> reactivateAccount(@PathVariable("accountid") Long accountID){
+    @PatchMapping(path = "/account/reactivate")
+    public ResponseEntity<?> reactivateAccount(@RequestParam("id") Long accountID){
         return updateAccountStatus(accountID, AccountStatus.ACTIVE);
     }
 

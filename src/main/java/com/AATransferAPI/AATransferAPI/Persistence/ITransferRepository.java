@@ -17,7 +17,7 @@ import java.util.List;
 @Qualifier("MySQLTransfers")
 public interface ITransferRepository extends JpaRepository<Transfer, UUID> {
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE) // not sure about this
+    // @Lock(LockModeType.PESSIMISTIC_WRITE) // not sure about this
     @Procedure(procedureName = "sp_MakeTransfer", outputParameterName = "message")
     String MakeTransfer(@Param("from_account") Long from_account,
                         @Param("to_account") Long to_account,
@@ -25,7 +25,13 @@ public interface ITransferRepository extends JpaRepository<Transfer, UUID> {
                         @Param("transferRef") String transferRef,
                         @Param("created_On") LocalDateTime created_On);
 
-    List<Transfer> findByaccountFrom(Long accountID);
-    List<Transfer> findByaccountTo(Long accountID);
+
+    @Procedure(procedureName = "sp_TransferForUser", outputParameterName = "status")
+    List<Transfer> getTransfersForUser(@Param("userID") Long userID);
+
+
+    @Procedure(procedureName = "sp_TransferForAccount", outputParameterName = "status")
+    List<Transfer> getTransfersForAccount(@Param("accountID") Long accountID);
+
 
 }

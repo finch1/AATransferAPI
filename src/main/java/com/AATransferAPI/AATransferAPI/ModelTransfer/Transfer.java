@@ -22,14 +22,19 @@ public class Transfer {
     @Id
     private UUID transferID;
     @Length(min = 3, max = 255, message = "Description of transfer is mandatory.")
+    @Column(nullable = false, updatable = false)
     private String transferRef;
     @Positive(message = "Source account is required.")
+    @Column(nullable = false, updatable = false)
     private Long accountFrom;
     @Positive(message = "Destination account is required.")
+    @Column(nullable = false, updatable = false)
     private Long accountTo;
     @NotBlank(message = "Destination account is required.")
+    @Column(nullable = false, updatable = false)
     private String currency;
     @Min(value = 0, message = "Destination account is required.")
+    @Column(nullable = false, updatable = false)
     private Double amount;
 
     @Embedded

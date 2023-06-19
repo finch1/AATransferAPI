@@ -4,11 +4,8 @@ import com.AATransferAPI.AATransferAPI.Audit.Audit;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.hibernate.annotations.GenericGenerator;
-
-import java.time.LocalDateTime;
 
 
 @Entity
@@ -25,12 +22,16 @@ public class Account implements IAccount{
     private Long accountID;
 
     @Positive(message = "ID Greater then zero.")
+    @Column(nullable = false, updatable = false)
     private Long userID;
     @Positive
+    @Column(nullable = false)
     private Double balance;
     @Enumerated(EnumType.ORDINAL)
+    @Column(nullable = false)
     private AccountStatus status = AccountStatus.ACTIVE;
     @NotBlank(message = "Account currency required.")
+    @Column(nullable = false, updatable = false)
     private String currency;
     @Embedded
     private Audit audit = new Audit();
