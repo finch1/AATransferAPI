@@ -14,6 +14,9 @@ services:
       - MYSQL_DATABASE=OperationsDB
       - MYSQL_USER=user
       - MYSQL_PASSWORD=pass1234
+    volumes:
+      - mysqldb:/var/lib/mysql
+      - ./sp_MakeTransfer.sql:/docker-entrypoint-initdb.d/sp_MakeTransfer.sql
 
   server:
     image: myapi:1.0
@@ -34,3 +37,7 @@ services:
 
 networks:
   springmysql-net:
+
+volumes:
+  mysqldb:
+    driver: local
