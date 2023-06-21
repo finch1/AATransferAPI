@@ -16,7 +16,7 @@ services:
       - MYSQL_PASSWORD=pass1234
     volumes:
       - mysqldb:/var/lib/mysql
-      - ./sp_MakeTransfer.sql:/docker-entrypoint-initdb.d/sp_MakeTransfer.sql
+      - ./db_init_script.sql:/docker-entrypoint-initdb.d/db_init_script.sql
 
   server:
     image: myapi:1.0

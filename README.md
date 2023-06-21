@@ -1,5 +1,21 @@
 # JavaSpringTest
 
+### Folder Structure
+- Java API: source code
+- Docker: 
+- - AATransferAPI.jar
+- - Dockerfile for JAR image
+- - docker-compose.yml
+- - db_init_script.sql 
+- - curlAPItest.sh
+
+1. copy Docker file to linux machine
+2. cd to Docker file
+3. docker build -t myapi:1.0 .
+4. docker-compose up
+5. wait for db to initialize and confirm containers are in running state
+6. bash curlAPItest.sh
+
 ### Account to Account Transfer Java API
 In this Spring Boot REST API, the concept of transferring funds between accounts is implemented. This system is assumed to handle internal accounts, and transfers in the same currency. The API handles Account creation, viewing and update requests and Transfers creation and viewing requests. The underlying business logic, handles data validation checks and audits.
 
@@ -133,6 +149,7 @@ The Account interface defines an account. The Audit class encapsulates common au
 
 ### Implementation Decisions
 - After implementing the API skeleton, i.e. initial domain model, DB interface and communication to/from server, more API and logic features were implemented. The Audit class is instantiated in Accounts with @Embedded annotation. As a result, audit information monitored with @PrePersist and @PreUpdate, is embedded with the account details and mapped to the same accounts table.
+<img src="Pictures/AuditTrail.jpg"><br></br>
 
 - Extra thought and effort is put in transfers mechanism of this API. The trail of thought was to implement best concurrency practices for when multiple transfers need to be processed fast and accurate. Developing a reliable query to effect a transfer proved cumbersome with Hibernate, so stored procedures are used instead for explicit control. 
 
