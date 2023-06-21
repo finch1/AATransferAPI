@@ -1,63 +1,111 @@
 ### Get all accounts
 GET http://localhost:8080/api/v1/accounts
-# $ curl -v localhost:8080/api/v1/accounts
+# curl -v -XGET -H "Content-type: application/json" 'localhost:8080/api/v1/accounts' | jq
 
 ### Get one account by account ID
 GET http://localhost:8080/api/v1/accounts/account/1
+# curl -v -XGET -H "Content-type: application/json" 'localhost:8080/api/v1/accounts/account/1' | jq
 ### Bad Request
 GET http://localhost:8080/api/v1/accounts/account/10
+# curl -v -XGET -H "Content-type: application/json" 'localhost:8080/api/v1/accounts/account/10' | jq
 
 ### Get all accounts for user
 GET http://localhost:8080/api/v1/accounts/user/1
-# $ curl -v localhost:8080/api/v1/accounts/user/
+# curl -v -XGET -H "Content-type: application/json" 'localhost:8080/api/v1/accounts/user/1' | jq
 ### Bad Request
 GET http://localhost:8080/api/v1/accounts/user/10
+# curl -v -XGET -H "Content-type: application/json" 'localhost:8080/api/v1/accounts/user/10' | jq
 
 ### Create New Account
 POST http://localhost:8080/api/v1/accounts/save
 Content-Type: application/json
 
 {
-    "userID":1,
+    "userID":4,
     "currency":"EUR",
     "balance":100.0
 }
+
+#curl -v -XPOST -H "Content-type: application/json" -d '{
+#    "userID":4,
+#    "currency":"EUR",
+#    "balance":100.0
+#}' 'localhost:8080/api/v1/accounts/save' | jq
+
+### Create New Account
+POST http://localhost:8080/api/v1/accounts/save
+Content-Type: application/json
+
+{
+    "userID":3,
+    "currency":"EUR",
+    "balance":100.0
+}
+
+#curl -v -XPOST -H "Content-type: application/json" -d '{
+#    "userID":5,
+#    "currency":"EUR",
+#    "balance":100.0
+#}' 'localhost:8080/api/v1/accounts/save' | jq
 
 ### Bad Request
 POST http://localhost:8080/api/v1/accounts/save
 Content-Type: application/json
 
 {
-    "userID":1,
+    "userID":8,
     "currency":"EUR"
 }
 
+#curl -v -XPOST -H "Content-type: application/json" -d '{
+#    "userID":8,
+#    "currency":"EUR"
+#}' 'localhost:8080/api/v1/accounts/save' | jq
+
 ### Update Account = Block
 PATCH http://localhost:8080/api/v1/accounts/account/block?id=1
+# curl -v -XPATCH -H "Content-type: application/json" 'localhost:8080/api/v1/accounts/account/block?id=1' | jq
 ### Bad Request
-PATCH http://localhost:8080/api/v1/accounts/account/block
+PATCH http://localhost:8080/api/v1/accounts/account/block?id=10
+#curl -v -XPATCH -H "Content-type: application/json" 'localhost:8080/api/v1/accounts/account/block?id=10' | jq
+
 ### Update Account = Reactivate
 PATCH http://localhost:8080/api/v1/accounts/account/reactivate?id=1
+# curl -v -XPATCH -H "Content-type: application/json" 'localhost:8080/api/v1/accounts/account/reactivate?id=1' | jq
 ### Bad Request
 PATCH http://localhost:8080/api/v1/accounts/account/reactivate
+# curl -v -XPATCH -H "Content-type: application/json" 'localhost:8080/api/v1/accounts/account/reactivate' | jq
+
 ### Update Account = Close
 PATCH http://localhost:8080/api/v1/accounts/account/close?id=1
+# curl -v -XPATCH -H "Content-type: application/json" 'localhost:8080/api/v1/accounts/account/close?id=1' | jq
+
 ### Bad Request
 PATCH http://localhost:8080/api/v1/accounts/account/close
+# curl -v -XPATCH -H "Content-type: application/json" 'localhost:8080/api/v1/accounts/account/close?id=10' | jq
 
 
 ### Get all transfers
 GET http://localhost:8080/api/v1/transfers
+# curl -v -XGET -H "Content-type: application/json" 'localhost:8080/api/v1/transfers' | jq
 ### Bad Request
 GET http://localhost:8080/api/v1/transfers/
+# curl -v -XGET -H "Content-type: application/json" 'localhost:8080/api/v1/transfers/' | jq
+
 ### Get all transfers for account
 GET http://localhost:8080/api/v1/transfers/account/1
+# curl -v -XGET -H "Content-type: application/json" 'localhost:8080/api/v1/transfers/account/1' | jq
 ### Bad Request
 GET http://localhost:8080/api/v1/transfers/account/10
+# curl -v -XGET -H "Content-type: application/json" 'localhost:8080/api/v1/transfers/account/10' | jq
+
 ### Get all transfers for user
 GET http://localhost:8080/api/v1/transfers/user/1
+# curl -v -XGET -H "Content-type: application/json" 'localhost:8080/api/v1/transfers/user/1' | jq
 ### Bad Request
 GET http://localhost:8080/api/v1/transfers/user/10
+# curl -v -XGET -H "Content-type: application/json" 'localhost:8080/api/v1/transfers/user/10' | jq
+
 ### Create Payment
 POST http://localhost:8080/api/v1/transfers/makeTransfer
 Content-Type: application/json
@@ -66,9 +114,23 @@ Content-Type: application/json
     "transferRef":"test transfer",
     "accountFrom":1,
     "accountTo":2,
-    "currency":"EUR",
-    "amount":5.0
+    "amount":53.0
 }
+
+#curl -v -XPOST -H "Content-type: application/json" -d '{
+#    "transferRef":"test transfer",
+#    "accountFrom":1,
+#    "accountTo":2,
+#    "amount":53.0
+#}' 'localhost:8080/api/v1/transfers/makeTransfer' | jq
+
+### Get one account by account ID
+GET http://localhost:8080/api/v1/accounts/account/1
+# curl -v -XGET -H "Content-type: application/json" 'localhost:8080/api/v1/accounts/account/1' | jq
+### Get one account by account ID
+GET http://localhost:8080/api/v1/accounts/account/2
+# curl -v -XGET -H "Content-type: application/json" 'localhost:8080/api/v1/accounts/account/2' | jq
+
 ### Bad Request
 POST http://localhost:8080/api/v1/transfers/makeTransfer
 Content-Type: application/json
@@ -77,14 +139,67 @@ Content-Type: application/json
     "transferRef":"test transfer",
     "accountFrom":3,
     "accountTo":4,
-    "currency":"EUR",
 }
 
+#curl -v -XPOST -H "Content-type: application/json" -d '{
+#    "transferRef":"test transfer",
+#    "accountFrom":3,
+#    "accountTo":4
+#}' 'localhost:8080/api/v1/transfers/makeTransfer' | jq
 
-# the $ at the beginning signifies that what follows it is a terminal command:
-# the -v signifies verbose output
-$ curl -v localhost:8080/api/v1/account/1
+### Account 1 update = closed
+PATCH http://localhost:8080/api/v1/accounts/account/close?id=1
+# curl -v -XPATCH -H "Content-type: application/json" 'localhost:8080/api/v1/accounts/account/close?id=1' | jq
 
-$ curl -X POST localhost:8080/employees -H 'Content-type:application/json' -d '{"name": "Samwise Gamgee", "role": "gardener"}'
+###
+POST http://localhost:8080/api/v1/transfers/makeTransfer
+Content-Type: application/json
 
-$ curl -X PUT localhost:8080/employees/3 -H 'Content-type:application/json' -d '{"name": "Samwise Gamgee", "role": "ring bearer"}'
+{
+    "transferRef":"test transfer",
+    "accountFrom":1,
+    "accountTo":2,
+    "amount":5.0
+}
+
+#curl -v -XPOST -H "Content-type: application/json" -d '{
+#    "transferRef":"test transfer",
+#    "accountFrom":1,
+#    "accountTo":2,
+#    "amount":5.0
+#}' 'localhost:8080/api/v1/transfers/makeTransfer' | jq
+
+### Get one account by account ID
+GET http://localhost:8080/api/v1/accounts/account/1
+# curl -v -XGET -H "Content-type: application/json" 'localhost:8080/api/v1/accounts/account/1' | jq
+### Get one account by account ID
+GET http://localhost:8080/api/v1/accounts/account/2
+# curl -v -XGET -H "Content-type: application/json" 'localhost:8080/api/v1/accounts/account/2' | jq
+
+### Account 3 update = blocked
+PATCH http://localhost:8080/api/v1/accounts/account/block?id=3
+# curl -v -XPATCH -H "Content-type: application/json" 'localhost:8080/api/v1/accounts/account/block?id=3' | jq
+###
+POST http://localhost:8080/api/v1/transfers/makeTransfer
+Content-Type: application/json
+
+{
+    "transferRef":"test transfer",
+    "accountFrom":2,
+    "accountTo":3,
+    "amount":5.0
+}
+
+#curl -v -XPOST -H "Content-type: application/json" -d '{
+#    "transferRef":"test transfer",
+#    "accountFrom":2,
+#    "accountTo":3,
+#    "amount":5.0
+#}' 'localhost:8080/api/v1/transfers/makeTransfer' | jq
+
+### Get one account by account ID
+GET http://localhost:8080/api/v1/accounts/account/2
+# curl -v -XGET -H "Content-type: application/json" 'localhost:8080/api/v1/accounts/account/2' | jq
+### Get one account by account ID
+GET http://localhost:8080/api/v1/accounts/account/3
+# curl -v -XGET -H "Content-type: application/json" 'localhost:8080/api/v1/accounts/account/3' | jq
